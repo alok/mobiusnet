@@ -41,7 +41,7 @@ class MobiusLayer(nn.Module):
         self.power: int = random.choice([0, 2])
         self.bias = nn.Parameter(torch.rand(in_features))
         self.offset = nn.Parameter(torch.rand(in_features))
-        self.scaling = nn.Parameter(torch.rand((1,)))
+        self.scaling = nn.Parameter(torch.rand(1))
 
     def forward(self, x: Tensor) -> Tensor:
         y = x - self.offset
