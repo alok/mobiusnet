@@ -1,0 +1,4 @@
+- [ ] restrict to orthogonality
+- [ ] add activations
+- [ ] stack into full network (swap out linear layers for mobius ones)
+- [ ] test on benchmark (like imgnet)
