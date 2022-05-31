@@ -15,11 +15,20 @@ from functools import lru_cache, reduce
 from itertools import chain, product
 from os import PathLike
 from pathlib import Path
-from typing import Dict, Iterable, List, Mapping, NamedTuple, Optional, Sequence
+from typing import (
+    Dict,
+    Iterable,
+    List,
+    Mapping,
+    NamedTuple,
+    Optional,
+    Sequence,
+)
 
 import torch
 import torch.nn.functional as F
-from torch import Tensor, as_tensor, nn as nn
+from torch import Tensor, as_tensor
+from torch import nn as nn
 
 
 class MobiusLayer(nn.Module):
@@ -36,11 +45,14 @@ class MobiusLayer(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         y = x - self.offset
+        # TODO stop using .weight and use orthogonal init
         return self.bias + self.scaling * self.weight.weight @ y / (
             y.norm() ** self.power
         )
-        # return self.bias + self.weights @ y / (y.norm() ** self.power)
 
+def check_orthogonality(orth_layer:MobiusLayer) -> bool:
+    U = orth_layer.weight.weight
+    return torch.allclose(U.T @ U, torch.eye(U.shape[0]))
 
 if __name__ == "__main__":
     layer = MobiusLayer(10, 10)
